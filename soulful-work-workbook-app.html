@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Art of Soulful Work — Interactive Workbook</title>
+<meta name="description" content="The interactive companion workbook to The Art of Soulful Work by Madeleine Joubert. Transform your whisper into your work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1A1A2E; --navy2:#232340; --gold:#C9A55C; --gold-soft:#E4CC96;
+  --cream:#F5EFE4; --paper:#FDFBF7; --ink:#2A2A3D; --muted:#6E6E82; --line:#E3DCCB;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',system-ui,sans-serif;font-size:16px;line-height:1.6;color:var(--ink);background:var(--paper)}
+h1,h2,h3,.serif{font-family:'Playfair Display',serif}
+
+/* ── Header / constellation nav ── */
+header{background:var(--navy);color:var(--cream);padding:26px 20px 20px;position:sticky;top:0;z-index:20}
+.h-inner{max-width:880px;margin:0 auto}
+.h-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.h-title{font-family:'Playfair Display',serif;font-size:1.25rem;letter-spacing:.04em}
+.h-title span{color:var(--gold)}
+.h-by{font-size:.78rem;opacity:.75}
+.constellation{display:flex;gap:0;align-items:center;margin-top:14px;overflow-x:auto;padding-bottom:4px}
+.star-wrap{display:flex;align-items:center}
+.star{width:30px;height:30px;min-width:30px;border-radius:50%;border:1.5px solid rgba(201,165,92,.5);background:transparent;color:var(--gold-soft);font-size:.7rem;font-weight:700;cursor:pointer;font-family:'Open Sans',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.star:hover{border-color:var(--gold)}
+.star.active{background:var(--gold);color:var(--navy);border-color:var(--gold);box-shadow:0 0 12px rgba(201,165,92,.55)}
+.star.done{border-color:var(--gold);background:rgba(201,165,92,.28)}
+.star-line{width:16px;height:1px;background:rgba(201,165,92,.35)}
+.star:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.progressbar{height:3px;background:rgba(255,255,255,.12);border-radius:2px;margin-top:12px;overflow:hidden}
+.progressfill{height:100%;background:var(--gold);width:0%;transition:width .4s}
+.savestate{font-size:.72rem;opacity:.6;margin-top:6px;min-height:1em}
+
+/* ── Main ── */
+main{max-width:880px;margin:0 auto;padding:36px 20px 90px}
+.ch-eyebrow{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.ch-title{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;color:var(--navy);margin:6px 0 4px}
+.ch-sub{font-style:italic;color:var(--muted);font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:26px}
+.part{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:18px;box-shadow:0 2px 12px rgba(26,26,46,.05)}
+.part h3{color:var(--navy);font-size:1.15rem;margin-bottom:4px}
+.part .p-sub{font-size:.88rem;color:var(--muted);margin-bottom:14px}
+label.q{display:block;font-weight:600;font-size:.92rem;margin:14px 0 6px;color:var(--navy)}
+label.q small{font-weight:400;color:var(--muted)}
+input[type=text],input[type=number],input[type=date],textarea,select{width:100%;font-family:inherit;font-size:.95rem;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink)}
+textarea{min-height:84px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+.checkrow{display:flex;align-items:flex-start;gap:10px;margin:8px 0;font-size:.93rem}
+.checkrow input{width:auto;margin-top:4px;accent-color:var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{border:1.5px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.85rem;cursor:pointer;background:#fff;font-family:inherit}
+.chip.sel{background:var(--navy);color:var(--gold-soft);border-color:var(--navy)}
+.rate{display:flex;gap:6px;align-items:center}
+.rate button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-family:inherit;font-weight:600;color:var(--muted)}
+.rate button.sel{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.rate .r-label{font-size:.85rem;margin-right:8px;min-width:180px}
+table.wtab{width:100%;border-collapse:collapse;margin-top:10px;font-size:.88rem}
+table.wtab th{text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:2px solid var(--line)}
+table.wtab td{padding:5px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+table.wtab input,table.wtab textarea{padding:7px 9px;font-size:.87rem;border-radius:7px}
+table.wtab textarea{min-height:44px}
+.addrow{margin-top:10px;background:none;border:1.5px dashed var(--gold);color:var(--navy);border-radius:9px;padding:7px 16px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
+.addrow:hover{background:rgba(201,165,92,.12)}
+.mirror{background:var(--navy);color:var(--cream);border-radius:var(--radius);padding:20px 24px;margin:16px 0;font-style:italic;font-family:'Playfair Display',serif}
+.mirror .m-label{font-family:'Open Sans',sans-serif;font-style:normal;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.assembled{background:var(--cream);border-left:4px solid var(--gold);padding:14px 18px;border-radius:0 10px 10px 0;font-style:italic;margin-top:12px;font-size:.98rem;color:var(--navy)}
+.quote{font-family:'Playfair Display',serif;font-style:italic;text-align:center;color:var(--muted);margin:26px auto;max-width:46ch}
+.navbtns{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+.navbtn{background:var(--navy);color:var(--cream);border:none;border-radius:999px;padding:13px 26px;font-family:inherit;font-weight:600;font-size:.95rem;cursor:pointer}
+.navbtn.ghost{background:none;border:1.5px solid var(--line);color:var(--navy)}
+.navbtn:hover{opacity:.92}
+.toolrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.toolbtn{background:none;border:1.5px solid var(--gold);color:var(--navy);border-radius:999px;padding:9px 18px;font-family:inherit;font-size:.83rem;font-weight:600;cursor:pointer}
+.appendix-card{background:var(--navy);color:var(--cream);border-radius:var(--radius);padding:22px 24px;margin-bottom:16px}
+.appendix-card h3{color:var(--gold);margin-bottom:8px;font-size:1.05rem}
+.appendix-card p, .appendix-card li{font-size:.9rem;opacity:.92}
+.appendix-card ol,.appendix-card ul{padding-left:20px;margin-top:6px}
+.slider-wrap{display:flex;align-items:center;gap:14px;margin-top:8px}
+input[type=range]{flex:1;accent-color:var(--gold)}
+.slider-val{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);min-width:2ch;text-align:center}
+footer{max-width:880px;margin:0 auto;padding:20px;font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+footer a{color:var(--navy);font-weight:600}
+/* ── Augmentation Line strip (shared component, B2C voicing) ── */
+.al-strip{max-width:880px;margin:26px auto;border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:#fff}
+.al-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.al-title{font-family:'Playfair Display',serif;font-weight:700;color:var(--navy)}
+.al-sub{font-size:.8rem;color:var(--muted)}
+.al-bar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
+.al-zone{padding:10px 12px;border-radius:8px;font-size:.78rem;line-height:1.35}
+.al-zone b{display:block;font-size:.85rem}
+.al-zone span{color:inherit;opacity:.75}
+.al-auto{background:rgba(26,26,46,.08)}
+.al-assist{background:rgba(201,165,92,.18)}
+.al-human{background:rgba(201,165,92,.38)}
+.al-context{font-size:.85rem;color:var(--muted);margin-top:12px;max-width:75ch}
+@media(max-width:600px){.al-bar{grid-template-columns:1fr}}
+@media print{.al-strip{display:none}}
+@media(max-width:600px){.rate .r-label{min-width:120px}.part{padding:16px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{header,.navbtns,.toolrow,footer{display:none}.part{break-inside:avoid;border:none;box-shadow:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="h-inner">
+    <div class="h-top">
+      <div class="h-title">THE ART OF <span>SOULFUL WORK</span> <span style="color:inherit;opacity:.6;font-size:.75rem;letter-spacing:.1em"> · WORKBOOK</span></div>
+      <div class="h-by">by Madeleine Joubert</div>
+    </div>
+    <nav class="constellation" id="constellation" aria-label="Chapters"></nav>
+    <div class="progressbar"><div class="progressfill" id="progressfill"></div></div>
+    <div class="savestate" id="savestate"></div>
+  </div>
+</header>
+
+<main id="main" aria-live="polite"></main>
+
+<!-- augmentation-line-strip: shared component -->
+<section class="al-strip" aria-label="The Augmentation Line">
+  <div class="al-head">
+    <span class="al-title">The Augmentation Line™</span>
+    <span class="al-sub">Where AI runs. Where humans sign.</span>
+  </div>
+  <div class="al-bar">
+    <div class="al-zone al-auto"><b>AI autonomous</b><span>high-volume, rule-based, reversible</span></div>
+    <div class="al-zone al-assist"><b>AI-assisted</b><span>drafted by machine, owned by a person</span></div>
+    <div class="al-zone al-human"><b>Human authority</b><span>gates, waivers, sign-off, accountability</span></div>
+  </div>
+  <p class="al-context" id="alContext">In soulful work, the Line runs through the page: the prompts and the structure were drafted with a machine's help; the reflection, the answers and what you choose to do next are yours alone — and your answers stay in this browser.</p>
+</section>
+
+<footer>
+  <div>© 2026 Madeleine Joubert · Companion to <em>The Art of Soulful Work</em> · For personal use · <a href="index.html">The method behind the workbook →</a></div>
+  <div>Your answers are saved in this browser only.</div>
+</footer>
+
+<script>
+/* ═══════════════ Storage (localStorage with in-memory fallback) ═══════════════ */
+const mem = {};
+const store = {
+  get(k){ try{ return localStorage.getItem(k) ?? mem[k] ?? null }catch(e){ return mem[k] ?? null } },
+  set(k,v){ mem[k]=v; try{ localStorage.setItem(k,v) }catch(e){/* preview mode: memory only */} }
+};
+const KEY='soulful-workbook-v1';
+let data = {};
+try{ data = JSON.parse(store.get(KEY)||'{}') }catch(e){ data={} }
+let saveTimer=null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    store.set(KEY, JSON.stringify(data));
+    const el=document.getElementById('savestate');
+    el.textContent='Saved · '+new Date().toLocaleTimeString();
+    updateProgress();
+  },400);
+}
+function D(id, v){ if(v===undefined) return data[id]??''; data[id]=v; save(); }
+
+/* ═══════════════ Field builders ═══════════════ */
+let uid=0;
+function fText(id,label,sub='',type='text'){
+  return `<label class="q" for="${id}">${label} ${sub?`<small>${sub}</small>`:''}</label>
+  <input type="${type}" id="${id}" value="${esc(D(id))}" oninput="D('${id}',this.value)">`;
+}
+function fArea(id,label,sub=''){
+  return `<label class="q" for="${id}">${label} ${sub?`<small>${sub}</small>`:''}</label>
+  <textarea id="${id}" oninput="D('${id}',this.value)">${esc(D(id))}</textarea>`;
+}
+function fCheck(id,items){
+  return items.map((it,i)=>{
+    const k=`${id}_${i}`, on=D(k)==='1';
+    return `<div class="checkrow"><input type="checkbox" id="${k}" ${on?'checked':''} onchange="D('${k}',this.checked?'1':'')"><label for="${k}">${it}</label></div>`;
+  }).join('');
+}
+function fRate(id,label,max=5){
+  const cur=+D(id)||0;
+  const btns=Array.from({length:max},(_,i)=>`<button type="button" class="${cur===i+1?'sel':''}" onclick="setRate('${id}',${i+1},${max},this)" aria-label="${label} ${i+1} of ${max}">${i+1}</button>`).join('');
+  return `<div class="rate" data-rate="${id}"><span class="r-label">${label}</span>${btns}</div>`;
+}
+function setRate(id,v,max,btn){
+  D(id,String(v));
+  const wrap=btn.closest('[data-rate]');
+  [...wrap.querySelectorAll('button')].forEach((b,i)=>b.classList.toggle('sel',i+1===v));
+}
+function fTable(id,cols,rows=4,areas=[]){
+  const n=Math.max(rows, +D(id+'_n')||rows);
+  let h=`<table class="wtab" id="${id}"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`;
+  for(let r=0;r<n;r++){
+    h+='<tr>'+cols.map((c,ci)=>{
+      const k=`${id}_${r}_${ci}`;
+      return `<td>${areas.includes(ci)
+        ?`<textarea oninput="D('${k}',this.value)">${esc(D(k))}</textarea>`
+        :`<input type="text" value="${esc(D(k))}" oninput="D('${k}',this.value)">`}</td>`;
+    }).join('')+'</tr>';
+  }
+  h+=`</tbody></table><button type="button" class="addrow" onclick="D('${id}_n',String(${n}+1));render()">+ Add a row</button>`;
+  return h;
+}
+function fChips(id,items){
+  return `<div class="chips">`+items.map((it,i)=>{
+    const k=`${id}_${i}`, on=D(k)==='1';
+    return `<button type="button" class="chip ${on?'sel':''}" onclick="D('${k}',D('${k}')==='1'?'':'1');this.classList.toggle('sel')">${it}</button>`;
+  }).join('')+`</div>`;
+}
+function fSlider(id,label,min=1,max=10){
+  const v=+D(id)||min;
+  return `<label class="q">${label}</label><div class="slider-wrap">
+  <input type="range" min="${min}" max="${max}" value="${v}" oninput="D('${id}',this.value);this.nextElementSibling.textContent=this.value">
+  <div class="slider-val">${v}</div></div>`;
+}
+function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;') }
+
+/* ═══════════════ Chapters ═══════════════ */
+const VALUES=['Autonomy','Creativity','Security','Impact','Justice','Mastery','Community','Harmony','Growth','Integrity','Curiosity','Freedom','Service','Excellence','Balance','Adventure','Simplicity'];
+
+const CH=[
+{id:'intro',short:'✦',title:'Your Starting Point',eyebrow:'Introduction',sub:'Before you begin, ground yourself in intention.',fields:[
+ ['part','Ground yourself','', ()=>fText('i_date','Today\'s date','','date')
+  +fArea('i_whisper','My whisper right now','What feeling, question, or quiet discontent brought you here?')
+  +`<label class="q">My commitment to this process</label>`
+  +fCheck('i_commit',['I will protect 30 minutes, 3× a week for reflection','I will answer honestly, even when it\'s uncomfortable','I will celebrate small insights, not just big breakthroughs'])
+  +fText('i_commit_other','Other commitment')
+  +fArea('i_letter','A note to my future self','Write to the you who will review this in 3–6 months.')],
+ ['quote','','',"«The most profound journey begins not with a step into the unknown, but with a turn inward.»"]
+]},
+{id:'c1',short:'1',title:'Core Constellation Blueprint',eyebrow:'Chapter 1',sub:'Unearthing your foundational energy zones, values, and strengths.',fields:[
+ ['part','Part A · Energy Zones Audit','Identify the activities that generate renewable vitality — not just "passion".',
+  ()=>fTable('c1_energy',['Activity / mode of engagement','Energy (1–5)','Why it fills my tank'],5,[2])
+  +fArea('c1_energy_ref','Reflection','Looking at your top 3 energy zones, what do they have in common?')],
+ ['part','Part B · Core Values Excavation','Circle what resonates, then narrow to five non-negotiables.',
+  ()=>fChips('c1_valchips',VALUES)+fText('c1_val_other','Other values')
+  +fTable('c1_values',['Value (top 5)','My personal definition','What it looks like daily','Boundary: what I won\'t tolerate'],5,[1,2,3])],
+ ['part','Part C · Innate Strengths Inventory','Native capacities, not learned skills — triangulate from three sources.',
+  ()=>fArea('c1_flow','Flow evidence','When do I lose track of time? What am I doing?')
+  +fArea('c1_praise','Authentic praise','What have others consistently thanked or relied on me for?')
+  +fArea('c1_role','Instinctive role','In groups, where does my mind naturally go?')
+  +fTable('c1_strengths',['Strength (top 3–4)','Definition in my words'],4,[1])],
+ ['part','Part D · Core Constellation Map','Where energy, values and strengths intersect is ground that bears weight.',
+  ()=>fArea('c1_map','Intersections & insights','Describe how the three excavations overlap. What patterns emerge?')
+  +fArea('c1_insight','Key insight','Where do energy, values and strengths intersect to form your foundation?')
+  +fText('c1_mandate','My soulful mandate — one sentence','"I am here to ___."')
+  +`<div class="assembled" id="mandateEcho"></div>`]
+]},
+{id:'c2',short:'2',title:'Life Archaeology & Theme Decoder',eyebrow:'Chapter 2',sub:'Excavating patterns from your past to decode your future direction.',fields:[
+ ['part','Part A · Life Timeline','Turning points, peak experiences, quiet shifts — go back further than feels relevant.',
+  ()=>fTable('c2_timeline',['Age / period','Event or experience','What it taught me','Theme / pattern'],6,[1,2,3])],
+ ['part','Part B · Theme Decoder','',
+  ()=>fText('c2_t1','Recurring theme 1')+fText('c2_t2','Recurring theme 2')+fText('c2_t3','Recurring theme 3')
+  +fArea('c2_connect','How do these themes connect to the work you feel called to do?')]
+]},
+{id:'c3',short:'3',title:'Soulful Work Ecosystem Canvas',eyebrow:'Chapter 3',sub:'Mapping the habitat where your soulful work can thrive. Picture the Tuesday, not the title.',fields:[
+ ['part','The Four Quadrants','',
+  ()=>fArea('c3_who','WHO I SERVE','Who benefits from my work? What do they need most?')
+  +fArea('c3_create','WHAT I CREATE','What tangible outputs or transformations do I produce?')
+  +fArea('c3_deliver','HOW I DELIVER','What formats, mediums or methods feel natural to me?')
+  +fArea('c3_where','WHERE I OPERATE','What environments, industries or communities call to me?')],
+ ['part','Ecosystem Integration Statement','',
+  ()=>fText('c3_s1','I serve …')+fText('c3_s2','by creating …')+fText('c3_s3','through …')+fText('c3_s4','in …')
+  +`<div class="assembled" id="ecoEcho"></div>`],
+ ['part','Your Tuesday, three years out','From the book, Chapter 3 — write it in sensory detail.',
+  ()=>fArea('c3_tuesday','My ordinary Tuesday, fully realised','What do you see, hear, feel? What is the recurring moment of quiet satisfaction?')]
+]},
+{id:'c4',short:'4',title:'Scaffolding & Experiment Planner',eyebrow:'Chapter 4',sub:'Low-risk experiments to test your soulful work hypotheses. Prototype; never leap.',fields:[
+ ['part','Experiment Design Template','',
+  ()=>fArea('c4_hyp','Hypothesis','What do I believe about my soulful work that I want to test?')
+  +fArea('c4_exp','Experiment','What small, time-bound action can test this?')
+  +fText('c4_dur','Duration','1 week / 1 month / 1 quarter')
+  +fText('c4_metric','Success metrics','How will I know if it worked?')
+  +fText('c4_res','Resources needed','Time, money, people, tools')
+  +fArea('c4_fear','Biggest fear','Fears shrink measurably when spelt.')
+  +fText('c4_step','Smallest first step','What can I do in the next 24 hours?')],
+ ['part','Experiment Tracker','Run up to three at once.',
+  ()=>fTable('c4_track',['Experiment','Start','End','Result / learning'],3,[3])]
+]},
+{id:'c5',short:'5',title:'Currency of Soul & “Enough” Calculator',eyebrow:'Chapter 5',sub:'Redefining wealth beyond money — what does "enough" truly mean for you?',fields:[
+ ['part','Part A · Your Currencies of Soul','Rate each for current fulfilment (1–5).',
+  ()=>['Financial security','Creative expression','Meaningful impact','Learning & growth','Connection & community','Autonomy & freedom','Recognition & legacy','Health & vitality'].map((c,i)=>fRate('c5_cur_'+i,c)).join('')],
+ ['part','Part B · The “Enough” Calculator','Fear rounds every risk up. Arithmetic rounds it back.',
+  ()=>fText('c5_min','My minimum financial "enough" (monthly)','Not survival — your life, dignified, with margins','number')
+  +fText('c5_thrive','What "thriving" looks like financially (monthly)','','number')
+  +`<div class="assembled" id="enoughEcho"></div>`
+  +fArea('c5_nonfin','Non-financial needs that must be met for me to feel whole')
+  +fArea('c5_chasing','What am I currently chasing that I don\'t actually need?')
+  +fText('c5_statement','My "Enough" statement','"I have enough when ___."')]
+]},
+{id:'c6',short:'6',title:'3-Act Narrative Builder',eyebrow:'Chapter 6',sub:'You are not changing direction. You are revealing the through-line.',fields:[
+ ['part','Act I · The Foundation','Curate the experiences that planted seeds for your current direction.',
+  ()=>fTable('c6_act1',['Past role / experience','Key skill or insight gained','How it foreshadows my pivot'],4,[1,2])],
+ ['part','Act II · The Pivot','Name the disconnect and the decision — plainly, without apology.',
+  ()=>fArea('c6_tension','The growing tension I felt')
+  +fArea('c6_clarity','The moment of clarity — what changed?')
+  +fArea('c6_choice','The choice I made, and why')],
+ ['part','Act III · The Convergence','',
+  ()=>fText('c6_now','What I do now')+fText('c6_serve','Who I serve')+fText('c6_blend','The unique blend I offer')+fText('c6_benefit','The benefit / outcome I create')],
+ ['part','The 30-Second Spark','Fill the blanks; your pitch assembles below. Rehearse it aloud until it stops sounding rehearsed.',
+  ()=>fText('c6_p1','I used to …')+fText('c6_p2','where I learned …')+fText('c6_p3','I realised …')+fText('c6_p4','so now I …')+fText('c6_p5','to help …')+fText('c6_p6','achieve …')
+  +`<div class="assembled" id="sparkEcho"></div>`],
+ ['part','The 2-Minute Tapestry & Deployment','',
+  ()=>fArea('c6_moment','The story within the story','"There was one moment that really crystallised it for me…"')
+  +`<label class="q">Where will you deploy your narrative?</label>`
+  +fCheck('c6_deploy',['LinkedIn headline rewritten around convergence','About section written first person, opening with Act III','Interview "tell me about yourself" practised: present → past → future','Networking 30-second spark + follow-up question ready','Graceful, factual response for sceptics prepared'])
+  +fText('c6_skeptic','My go-to response for sceptics')
+  +fArea('c6_reflect','Reflection','How does telling this story change how I see myself?')]
+]},
+{id:'c7',short:'7',title:'Courage & Saboteur Navigator',eyebrow:'Chapter 7',sub:'The saboteur is not your enemy. It is your oldest bodyguard.',fields:[
+ ['part','Part A · Saboteur Mask ID','Name the fear to reduce its power. When you feel stuck, which mask is talking?',
+  ()=>['The Inner Critic — attacks worthiness: "You\'re not good enough"','The Imposter — comparison & isolation: "They\'re real; I\'m faking"','The Catastrophiser — doomsday spirals: "If this fails, I\'m ruined"'].map((m,i)=>
+    `<label class="q">${m}</label>`+fText(`c7_m${i}_trig`,'Trigger context')+fText(`c7_m${i}_phrase`,'Common phrase it uses')+fText(`c7_m${i}_resp`,'My compassionate response')).join('')
+  +fArea('c7_corefear','My saboteur\'s core fear','What is it trying to protect me from? The answer is usually younger than you expect.')],
+ ['part','Part B · Mindful Witnessing Log','Pause & breathe · name & neutralise · get curious · thank & reorient.',
+  ()=>fTable('c7_log',['Date','Fear that arose','Mask identified','One small brave action I took'],4,[3])],
+ ['part','Part C · Cognitive Reframe Journal','Not affirmations — corrections of the record.',
+  ()=>fTable('c7_reframe',['Limiting belief','Accurate, empowering reframe'],4,[0,1])],
+ ['part','Part D & E · Self-Compassion + Daily Courage','',
+  ()=>fText('c7_mantra','My self-compassion mantra')
+  +`<label class="q">Today, I was courageous when I…</label>`
+  +fCheck('c7_courage',['Sent the email I\'d drafted seven times','Deleted the apology from the top of my proposal','Set a boundary to protect my energy','Shared my nascent idea with one trusted person','Billed what I\'m truly worth','Sat with uncertainty for 5 minutes without frantic action'])
+  +fText('c7_felt','How it felt afterwards')]
+]},
+{id:'c8',short:'8',title:'Daily Architecture & Energy Flow',eyebrow:'Chapter 8',sub:'You don\'t build a life\'s work. You build days that add up to one.',fields:[
+ ['part','Part A · Energy Cycle Map','For one week, log your energy (E1 exhausted → E5 electrified) three times daily.',
+  ()=>fTable('c8_energy',['Day','Morning','Afternoon','Evening','Pattern'],7)
+  +fText('c8_peaks','My peak energy windows')+fText('c8_dips','My natural dip times')
+  +fText('c8_peak_tasks','Tasks to match to peaks','Deep work, creativity, courage')
+  +fText('c8_dip_tasks','Tasks to match to dips','Admin, email, organising')],
+ ['part','Part B · Keystone Rituals','',
+  ()=>fText('c8_morning','Morning ritual script','"When I wake, I will ___."')
+  +fText('c8_evening','Evening closure script','"When I close my workday, I will ___."')],
+ ['part','Part C · Boundary Blueprint','',
+  ()=>fText('c8_deep','My deep work blocks','e.g. 9–11am, 4 days/week')
+  +fText('c8_comm','How I communicate this')
+  +fText('c8_no','My "no" script')
+  +fText('c8_rest','How I protect rest time')],
+ ['part','Part D & E · Sprint / Rest + Weekly Review','',
+  ()=>fText('c8_sprint_goal','Upcoming sprint — goal / milestone')+fText('c8_sprint_dates','Sprint dates')
+  +fText('c8_rest_dates','Mandated rest period dates')
+  +fText('c8_rest_frame','How I will reframe rest','"This is not laziness; this is ___."')
+  +fArea('c8_week_energised','Weekly review — what energised me?')+fArea('c8_week_drained','What drained me?')
+  +fText('c8_week_celebrate','One completion to celebrate')
+  +fArea('c8_week_priorities','Top 3 priorities for next week')
+  +fArea('c8_align','Alignment check','Do my planned actions still serve my larger vision?')]
+]},
+{id:'c9',short:'9',title:'Soulful Network Cultivator',eyebrow:'Chapter 9',sub:'Your people are found by giving, not hunting.',fields:[
+ ['part','Part A · Network Role Map','',
+  ()=>fTable('c9_map',['Role (Mentor / Peer / Cheerleader / Collaborator)','Person','How they nourish my growth','Next connection'],4,[2])
+  +fArea('c9_strongthin','Where is my network strong? Where is it thin?')],
+ ['part','Part B · Detractor Boundary Scripts','Some detractors are frightened love. Some are just weather.',
+  ()=>fText('c9_concern','The concern I hear most','e.g. "When are you getting a real job again?"')
+  +fText('c9_response','My graceful, firm response')
+  +fText('c9_protect','Energy protection rule','I will reinvest defence-energy in ___')],
+ ['part','Part C · Ask / Give Tracker','',
+  ()=>`<label class="q">Asking for help — specific, respectful, prepared</label>`
+  +fTable('c9_ask',['Person','Specific ask','Why them?','Follow-up'],3,[1])
+  +`<label class="q">Offering value — attentive generosity</label>`
+  +fTable('c9_give',['Person','How I can support them','Action taken','Their response'],3,[1])
+  +fText('c9_intention','My next connection intention','"This week, I will reach out to ___."')]
+]},
+{id:'c11',short:'11',title:'Quarterly Soul Check-In',eyebrow:'Chapter 11',sub:'You are not finished. You are becoming.',fields:[
+ ['part','Part A · Quarterly Audit','',
+  ()=>fText('c11_q','Quarter & year','e.g. Q3 2026')
+  +fArea('c11_drained','Tasks / interactions that drained me')
+  +fArea('c11_energised','Tasks / interactions that energised me')
+  +fArea('c11_curiosity','Curiosity scan','What have I found myself researching lately? What new skill or topic am I drawn to? Curiosity moves years before dissatisfaction does.')
+  +fArea('c11_impact','Impact assessment','Where did my work matter most this quarter?')
+  +fText('c11_enough','Does "enough" still hold?','Yes / mostly / no — if no, what needs to shift?')
+  +fSlider('c11_score','Overall alignment rating',1,10)],
+ ['part','Part B · Iteration vs Pivot','Is my work still a river, or has it become a cage?',
+  ()=>fArea('c11_iter','If ITERATION: my iteration idea, first small step, timeline')
+  +fArea('c11_pivot','If PIVOT: what is non-negotiable to change? What scaffolding first? What support?')],
+ ['part','Part C · Second / Third Act Scaffolding','Suzanne built a law degree on this scaffolding. Patience is the material.',
+  ()=>fText('c11_skills','Transferable skills from my previous chapter')
+  +fText('c11_network','Network connections')+fText('c11_proof','Proof of concept / results')+fText('c11_runway','Financial runway / strategy')
+  +fText('c11_bridge','My chosen bridge strategy','Strategic sabbatical / parallel path / consultancy bridge / other')
+  +fTable('c11_90day',['Month','Key milestone','Success metric','Support needed'],3)],
+ ['part','Part D & E · Agility + Evolution Plan','',
+  ()=>fText('c11_verb','My fluid identity — the verb','Instead of "I am a [title]": "I ___." Verbs travel; nouns expire.')
+  +fText('c11_discomfort','Deliberate discomfort challenge (next 90 days)')
+  +fArea('c11_future','Future-self dialogue','What does she appreciate about the current work? What does she gently nudge me to notice?')
+  +fText('c11_keep','Keep doing')+fText('c11_start','Start doing')+fText('c11_stop','Stop doing')+fText('c11_explore','Explore further')
+  +fText('c11_commit','My commitment to ongoing creation','"I am not finished. I am becoming. I will ___."')]
+]},
+{id:'conc',short:'✦',title:'Your Ongoing Creation Log',eyebrow:'Conclusion',sub:'The work of a lifetime.',fields:[
+ ['mirror','Your whisper, then','',()=>D('i_whisper')||'(You haven\'t written your Day One whisper yet — visit Your Starting Point.)'],
+ ['part','And now','',
+  ()=>fText('cn_date','Today\'s date','','date')
+  +fArea('cn_whisper','My whisper now','How has it changed since the Introduction?')
+  +fArea('cn_insight','One insight I\'m carrying forward')
+  +fText('cn_action','One courageous action I will take this week')
+  +fArea('cn_letter','A letter to my future self','Review in six months.')],
+ ['quote','','',"«Begin. Continue. Trust the process. And never, ever stop listening to the quiet, wise voice of your own soul.»<br><br>«The work of a lifetime awaits. Not as a burden, but as an invitation.»<br>— Madeleine Joubert, The Art of Soulful Work"],
+ ['appendix','Quick Reference','', ()=>`
+  <div class="appendix-card"><h3>Core Constellation Quick Check</h3><p>Does this align with my Energy Zones? Honour my Core Values? Use my Innate Strengths? <em>If two or more are "no", pause and reconsider.</em></p></div>
+  <div class="appendix-card"><h3>Saboteur First Aid</h3><ol><li>Pause + three breaths</li><li>Name the mask: Critic / Imposter / Catastrophiser</li><li>Ask: "What is this part trying to protect me from?"</li><li>Thank it + reorient to one small brave step</li></ol></div>
+  <div class="appendix-card"><h3>Emergency Reset</h3><ol><li>Stop. Breathe. Hand on heart.</li><li>Ask: "What is the smallest next step that honours my core?"</li><li>Do that one thing.</li><li>Return to your Compassion Pause (Chapter 7).</li></ol></div>`]
+]}
+];
+
+/* ═══════════════ Render ═══════════════ */
+let current = +(store.get(KEY+'-page')||0);
+function render(){
+  const ch=CH[current];
+  let h=`<div class="ch-eyebrow">${ch.eyebrow}</div><h1 class="ch-title">${ch.title}</h1><div class="ch-sub">${ch.sub}</div>`;
+  for(const [kind,title,sub,content] of ch.fields){
+    const body = typeof content==='function'?content():content;
+    if(kind==='part') h+=`<section class="part"><h3>${title}</h3>${sub?`<div class="p-sub">${sub}</div>`:''}${body}</section>`;
+    if(kind==='quote') h+=`<div class="quote">${body}</div>`;
+    if(kind==='mirror') h+=`<div class="mirror"><div class="m-label">${title}</div>${esc(body).replace(/\n/g,'<br>')}</div>`;
+    if(kind==='appendix') h+=`<section><h3 class="serif" style="color:var(--navy);margin:10px 0">${title}</h3>${body}</section>`;
+  }
+  h+=`<div class="navbtns">
+    ${current>0?`<button class="navbtn ghost" onclick="go(${current-1})">← ${CH[current-1].title}</button>`:'<span></span>'}
+    ${current<CH.length-1?`<button class="navbtn" onclick="go(${current+1})">${CH[current+1].title} →</button>`:''}
+  </div>
+  <div class="toolrow">
+    <button class="toolbtn" onclick="exportAll()">Download my answers (.md)</button>
+    <button class="toolbtn" onclick="window.print()">Print this chapter</button>
+    <button class="toolbtn" onclick="resetAll()">Start over</button>
+  </div>`;
+  document.getElementById('main').innerHTML=h;
+  buildNav(); updateEchoes(); updateProgress();
+  window.scrollTo({top:0});
+}
+function go(i){ current=i; store.set(KEY+'-page',String(i)); render(); }
+
+function buildNav(){
+  const nav=document.getElementById('constellation'); nav.innerHTML='';
+  CH.forEach((ch,i)=>{
+    const w=document.createElement('div'); w.className='star-wrap';
+    const b=document.createElement('button');
+    b.className='star'+(i===current?' active':'')+(chapterDone(i)?' done':'');
+    b.textContent=ch.short; b.title=ch.title; b.setAttribute('aria-label',ch.title);
+    b.onclick=()=>go(i);
+    w.appendChild(b);
+    if(i<CH.length-1){ const l=document.createElement('div'); l.className='star-line'; w.appendChild(l); }
+    nav.appendChild(w);
+  });
+}
+function chapterKeys(i){
+  const pre={0:'i_',1:'c1_',2:'c2_',3:'c3_',4:'c4_',5:'c5_',6:'c6_',7:'c7_',8:'c8_',9:'c9_',10:'c11_',11:'cn_'}[i];
+  return Object.keys(data).filter(k=>k.startsWith(pre)&&String(data[k]).trim());
+}
+function chapterDone(i){ return chapterKeys(i).length >= ({0:3,11:3}[i]||5); }
+function updateProgress(){
+  const done=CH.filter((_,i)=>chapterDone(i)).length;
+  document.getElementById('progressfill').style.width=(100*done/CH.length)+'%';
+  const nav=document.getElementById('constellation');
+  if(nav) [...nav.querySelectorAll('.star')].forEach((s,i)=>s.classList.toggle('done',chapterDone(i)));
+}
+function updateEchoes(){
+  const m=document.getElementById('mandateEcho');
+  if(m) m.textContent = D('c1_mandate') ? '"'+D('c1_mandate')+'"' : 'Your mandate will appear here as you write it.';
+  const e=document.getElementById('ecoEcho');
+  if(e) e.textContent = (D('c3_s1')||D('c3_s2'))
+    ? `"I serve ${D('c3_s1')||'…'} by creating ${D('c3_s2')||'…'} through ${D('c3_s3')||'…'} in ${D('c3_s4')||'…'}."`
+    : 'Your integration statement assembles here.';
+  const s=document.getElementById('sparkEcho');
+  if(s) s.textContent = (D('c6_p1')||D('c6_p4'))
+    ? `"I used to ${D('c6_p1')||'…'}, where I learned ${D('c6_p2')||'…'}. I realised ${D('c6_p3')||'…'}, so now I ${D('c6_p4')||'…'} to help ${D('c6_p5')||'…'} achieve ${D('c6_p6')||'…'}."`
+    : 'Your 30-second spark assembles here as you fill the blanks.';
+  const en=document.getElementById('enoughEcho');
+  if(en){ const a=+D('c5_min')||0,b=+D('c5_thrive')||0;
+    en.textContent = a? `Your enough: ${a.toLocaleString()} / month · Thriving: ${b?b.toLocaleString():'—'} / month${b&&a?` · The freedom gap between them is ${(b-a).toLocaleString()}.`:''}` : 'Your numbers appear here. The 3am voice cannot argue with arithmetic.'; }
+}
+document.addEventListener('input',()=>{ updateEchoes(); });
+
+/* ═══════════════ Export / reset ═══════════════ */
+function exportAll(){
+  let md=`# The Art of Soulful Work — My Workbook\n_${new Date().toLocaleDateString('en-GB')}_\n`;
+  CH.forEach((ch,i)=>{
+    const keys=chapterKeys(i);
+    if(!keys.length) return;
+    md+=`\n\n## ${ch.eyebrow}: ${ch.title}\n`;
+    keys.sort().forEach(k=>{ md+=`\n**${k.replace(/^[a-z0-9]+_/,'').replace(/_/g,' ')}**: ${data[k]}\n`; });
+  });
+  const blob=new Blob([md],{type:'text/markdown'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='soulful-work-my-answers.md'; a.click(); URL.revokeObjectURL(a.href);
+}
+function resetAll(){
+  if(!confirm('This clears every answer in this browser. Download your answers first?')) return;
+  data={}; store.set(KEY,'{}'); go(0);
+}
+
+render();
+</script>
+</body>
+</html>
